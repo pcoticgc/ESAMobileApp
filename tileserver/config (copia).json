@@ -1,0 +1,40 @@
+{
+    "options": {
+      "paths": {
+        "root": "/home/tonilogar/.nvm/versions/node/v6.17.1/lib/node_modules/tileserver-gl-light/node_modules/tileserver-gl-styles",
+        "fonts": "fonts",
+        "styles": "styles",
+        "mbtiles": "/home/tonilogar/Documentos/trabajos/servidroVirtual/www/repositoryPcotIcgc/taller-vt/tileserver/data"
+      }
+    },
+    "styles": {
+      "klokantech-basic": {
+        "style": "klokantech-basic/style.json",
+        "tilejson": {
+          "bounds": [
+            -180,
+            -85.0511,
+            180,
+            85.0511
+          ]
+        }
+      },
+      "osm-bright": {
+        "style": "osm-bright/style.json",
+        "tilejson": {
+          "bounds": [
+            -180,
+            -85.0511,
+            180,
+            85.0511
+          ]
+        }
+      }
+    },
+    "data": {
+      "v3": {
+        "mbtiles": "barcelona.mbtiles"
+      }
+    }
+  }
+  
