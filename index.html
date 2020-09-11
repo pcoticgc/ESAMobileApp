@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Mapa VT</title>
+        <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' />
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+        <link href='https://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.css' rel='stylesheet' />
+        <script src='https://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.min.js'></script>
+        <style>
+            html, body {
+                margin: 0;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body id='map'>
+        <script>
+           mapboxgl.accessToken = 'pk.eyJ1IjoidG9uaWxvZ2FyIiwiYSI6ImNqYjZlamY1dzBtMXEzM3FxbmppeXBpeHoifQ.DbzKh1wtO4p4QOUjj9eg1w';
+            var map = new mapboxgl.Map({
+                container: 'map', // id del elemento HTML que contendrá el mapa
+                style: 'http://localhost:8081/styles/osm-bright/style.json', // Ubicación del estilo
+                center: [2.175, 41.39], // Ubicación inicial
+                zoom: 8
+               /*  bearing: -45,
+                pitch: 60,
+                hash: true */
+            });
+        
+            map.on('load', function() {
+                map.addSource("buildings", {
+                    "type": "vector",
+                    "url": "http://localhost:8081/data/pous.json"
+                });
+        
+                map.addLayer({
+                    "id": "out",
+                    "source": "out",
+                    "source-layer": "int",
+                    "type": "fill",
+                    "paint": {
+                        "fill-opacity": 0.75,
+                        "fill-color": "#E9DFCD",
+                        "fill-outline-color": "#000"
+                    }
+                });
+            });
+        
+            // Agrega controles de navegación (zoom, rotación) al mapa:
+            map.addControl(new mapboxgl.NavigationControl());
+        
+            // Agregar el control de inspección
+            /* map.addControl(new MapboxInspect()); */
+            
+            map.addControl(new MapboxInspect({
+            showInspectMap: true,
+            showInspectButton: false
+            }));
+
+            /* Boton para geolocalizar al usuario */
+            map.addControl(new mapboxgl.GeolocateControl({
+            positionOptions: {
+            enableHighAccuracy: true
+            },
+            trackUserLocation: true
+        }));
+        </script>
+</body>
+</html>
+
