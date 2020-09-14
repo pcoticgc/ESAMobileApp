@@ -19,43 +19,36 @@
         <script>
             var map = new mapboxgl.Map({
                 container: 'map', // id del elemento HTML que contendrá el mapa
-                style: 'http://localhost:8081/styles/osm-bright/style.json', // Ubicación del estilo
+                style: 'https://geoserveis.icgc.cat/contextmaps/hibrid.json', // Ubicación del estilo
                 center: [2.175, 41.39], // Ubicación inicial
-                zoom: 8
-               /*  bearing: -45,
-                pitch: 60,
-                hash: true */
+                zoom: 13 // Zoom inicial
+                /* bearing: -45, // Ángulo de rotación inicial
+                hash: true // Permite ir guardando la posición del mapa en la URL */
             });
-        
             map.on('load', function() {
-                map.addSource("buildings", {
+                map.addSource("out", {
                     "type": "vector",
-                    "url": "http://localhost:8081/data/pous.json"
+                    "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/pcot_in/{z}/{x}/{y}.pbf"]
                 });
         
                 map.addLayer({
-                    "id": "out",
+                    "id": "outPoints",
                     "source": "out",
-                    "source-layer": "int",
-                    "type": "fill",
+                    "source-layer": "in",
+                    "type": "circle",
                     "paint": {
-                        "fill-opacity": 0.75,
-                        "fill-color": "#E9DFCD",
-                        "fill-outline-color": "#000"
+                        "circle-opacity": 0.75,
+                        "circle-color": "#3413ba",
+                        "circle-stroke-color": "#000"
                     }
                 });
             });
         
             // Agrega controles de navegación (zoom, rotación) al mapa:
             map.addControl(new mapboxgl.NavigationControl());
-        
+
             // Agregar el control de inspección
-            /* map.addControl(new MapboxInspect()); */
-            
-            map.addControl(new MapboxInspect({
-            showInspectMap: true,
-            showInspectButton: false
-            }));
+           /*  map.addControl(new MapboxInspect()); */
 
             /* Boton para geolocalizar al usuario */
             map.addControl(new mapboxgl.GeolocateControl({

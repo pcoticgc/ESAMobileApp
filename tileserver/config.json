@@ -22,12 +22,6 @@
       }
     },
     "data": {
-        "v3": {
-          "mbtiles": "barcelona.mbtiles"
-        },
-        "buildings": {
-          "mbtiles": "buildings.mbtiles"
-        },
         "pous": {
             "mbtiles": "out.mbtiles"
           }
