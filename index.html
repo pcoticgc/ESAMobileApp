@@ -28,7 +28,8 @@
             map.on('load', function() {
                 map.addSource("out", {
                     "type": "vector",
-                    "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/pcot_in/{z}/{x}/{y}.pbf"]
+                    /* "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/pcot_in/{z}/{x}/{y}.pbf"] */
+                    "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/pousCat/%7Bz%7D/%7Bx%7D/%7By%7D.pbf"]
                 });
         
                 map.addLayer({
