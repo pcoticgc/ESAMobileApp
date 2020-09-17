@@ -1,60 +1,153 @@
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Mapa VT</title>
-        <link rel='stylesheet' href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' />
-        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
-        <link href='https://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.css' rel='stylesheet' />
-        <script src='https://mapbox-gl-inspect.lukasmartinelli.ch/dist/mapbox-gl-inspect.min.js'></script>
-        <style>
-            html, body {
-                margin: 0;
-                height: 100%;
-            }
-        </style>
-    </head>
-    <body id='map'>
-        <script>
-            var map = new mapboxgl.Map({
-                container: 'map', // id del elemento HTML que contendrá el mapa
-                style: 'https://geoserveis.icgc.cat/contextmaps/hibrid.json', // Ubicación del estilo
-                center: [2.175, 41.39], // Ubicación inicial
-                zoom: 13 // Zoom inicial
-                /* bearing: -45, // Ángulo de rotación inicial
-                hash: true // Permite ir guardando la posición del mapa en la URL */
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Add a geocoder</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css" type="text/css"/>
+<link rel="stylesheet" href="./css/appESA.css" type="text/css"/>
+<!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+</head>
+<body>
+    <nav id="menu"></nav>
+    <div id="map"></div>
+ 
+    <script>
+        // Style//////////////////////
+	    var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'https://geoserveis.icgc.cat/contextmaps/hibrid.json', 
+            center: [1.5, 41.6],
+            zoom: 8
             });
-            map.on('load', function() {
-                map.addSource("outDef", {
-                    "type": "vector",
-                    "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/pousCat/{z}/{x}/{y}.pbf"],
-                    /* "minzoom": 20, */
-                    "maxzoom": 7
-                });
-        
-                map.addLayer({
-                    "id": "outPoints",
-                    "source": "outDef",
-                    "source-layer": "in",
-                    "type": "circle",
-                    "paint": {
-                        "circle-opacity": 1,
-                        "circle-color": "#3413ba",
-                        "circle-stroke-color": "#7fb872"
-                    }
-                });
+        // Style//////////////////////
+        // Search//////////////////////
+        map.addControl(
+            new MapboxGeocoder({
+            accessToken: 'pk.eyJ1IjoidG9uaWxvZ2FyIiwiYSI6ImNqY3VkMnVmazB2bm0yd283aXBxZDV5d3gifQ.bbqgWxCfhrZVG-IgOPyQ8g',
+            mapboxgl: mapboxgl
+            })
+            );
+        // Search//////////////////////
+        // Create map//////////////////////
+        map.on('load', function() {
+            //////////////////Green points//////////////////////////////////////
+            var greenTiles=map.addSource("no_detected_pointsGreen", {
+                "type": "vector",
+                "url": "http://localhost:8081/data/no_detected_pointsGreen.json",
+                "maxzoom": 7
+            });       
+            var greenLayer=map.addLayer({
+                "id": "Green",
+                "source": "no_detected_pointsGreen",
+                "source-layer": "no_detected_pointsGreen",
+                "type": "circle",
+                "layout": {
+                "visibility": "visible"
+                },
+                "paint": {
+                    "circle-radius": 4,
+                    "circle-color": "green"
+                }
+            });
+            //////////////////Green points//////////////////////////////////////
+            //////////////////Blue points//////////////////////////////////////
+            map.addSource("outDef", {
+                "type": "vector",
+                "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/pousCat/{z}/{x}/{y}.pbf"],
+                "maxzoom": 7
             });
         
-            // Agrega controles de navegación (zoom, rotación) al mapa:
-            map.addControl(new mapboxgl.NavigationControl());
+            map.addLayer({
+                "id": "Blue",
+                "source": "outDef",
+                "source-layer": "in",
+                "type": "circle",
+                "layout": {
+                "visibility": "visible"
+                },
+                "paint": {
+                    "circle-opacity": 1,
+                    "circle-color": "#3413ba",
+                    "circle-stroke-color": "#7fb872"
+                }
+            });
+            //////////////////Blue points//////////////////////////////////////
+            //////////////////Red points//////////////////////////////////////
+            map.addSource("detected_pointsRed", {
+                "type": "vector",
+                "url": "http://localhost:8081/data/detected_pointsRed.json",
+                "maxzoom": 7
+            });
+            map.addLayer({
+                "id": "Red",
+                "source": "detected_pointsRed",
+                "source-layer": "detected_pointsRed",
+                "type": "circle",
+                "layout": {
+                "visibility": "visible"
+                },
+                "paint": {
+                    "circle-radius": 4,
+                    "circle-color": "red"
+                }
+            });
+            //////////////////Red points//////////////////////////////////////  
+        });
+        // Create map//////////////////////
 
-               /* Boton para geolocalizar al usuario */
-               map.addControl(new mapboxgl.GeolocateControl({
+        // Controls navigation (zoom, rotation)/////////////
+        map.addControl(new mapboxgl.NavigationControl());
+
+        // Geolocate////////////////////////////////////
+            map.addControl(new mapboxgl.GeolocateControl({
             positionOptions: {
             enableHighAccuracy: true
             },
             trackUserLocation: true
-            }));
-        </script>
+        }));
+
+        //Disable enable layers//////////    
+        // enumerate ids of the layers
+        var toggleableLayerIds = ['Green', 'Blue', 'Red'];
+
+        // set up the corresponding toggle button for each layer
+        for (var i = 0; i < toggleableLayerIds.length; i++) {
+            var id = toggleableLayerIds[i];
+
+            var link = document.createElement('a');
+            link.href = '#';
+            link.className = 'active';
+            link.textContent = id;
+
+            link.onclick = function (e) {
+                var clickedLayer = this.textContent;
+                e.preventDefault();
+                e.stopPropagation();
+
+                var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+                // toggle layer visibility by changing the layout object's visibility property
+                if (visibility === 'visible') {
+                    map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                    this.className = '';
+                } else {
+                    this.className = 'active';
+                    map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+                }
+            };
+
+            var layers = document.getElementById('menu');
+            layers.appendChild(link);
+        }
+
+//Disable enable layers//////////   
+</script>
+ 
 </body>
 </html>
