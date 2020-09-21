@@ -52,25 +52,26 @@
         // Create map //////////////////////
         map.on('load', function() {
             ////////////////// Green points //////////////////////////////////////
-            var greenTiles=map.addSource("no_detected_pointsGreen", {
+            map.addSource("VERDE_punts_no_aquifer", {
                 "type": "vector",
-                "url": "http://localhost:8081/data/no_detected_pointsGreen.json",
+                "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/VERDE_punts_no_aquifer/{z}/{x}/{y}.pbf"],
                 "maxzoom": 7
             });       
-            var greenLayer=map.addLayer({
-                "id": "Green",
-                "source": "no_detected_pointsGreen",
-                "source-layer": "no_detected_pointsGreen",
+            map.addLayer({
+                "id": "Non aquifer motion points",
+                "source": "VERDE_punts_no_aquifer",
+                "source-layer": "VERDE_punts_no_aquifer",
                 "type": "circle",
                 "layout": {
                 "visibility": "visible"
                 },
                 "paint": {
-                    "circle-radius": 4,
+                    "circle-radius": 6,
                     "circle-color": "green"
                 }
             });
             ////////////////// Green points //////////////////////////////////////
+            ////////////////// Blue points //////////////////////////////////////
             ////////////////// Blue points //////////////////////////////////////
             map.addSource("outDef", {
                 "type": "vector",
@@ -79,7 +80,7 @@
             });
         
             map.addLayer({
-                "id": "Blue",
+                "id": "Declared wells",
                 "source": "outDef",
                 "source-layer": "in",
                 "type": "circle",
@@ -87,32 +88,31 @@
                 "visibility": "visible"
                 },
                 "paint": {
-                    "circle-opacity": 1,
-                    "circle-color": "#3413ba",
-                    "circle-stroke-color": "#7fb872"
+                    "circle-radius": 3,
+                    "circle-color": "blue"
                 }
             });
             ////////////////// Blue points //////////////////////////////////////
             ////////////////// Red points //////////////////////////////////////
-            map.addSource("detected_pointsRed", {
+            var rojoSource=map.addSource("ROJO_punts_aquifer_detectats", {
                 "type": "vector",
-                "url": "http://localhost:8081/data/detected_pointsRed.json",
+                "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/ROJO_punts_aquifer_detectats/{z}/{x}/{y}.pbf"],
                 "maxzoom": 7
             });
-            map.addLayer({
-                "id": "Red",
-                "source": "detected_pointsRed",
-                "source-layer": "detected_pointsRed",
+            var rojoLayer=map.addLayer({
+                "id": "Aquifer motion points",
+                "source": "ROJO_punts_aquifer_detectats",
+                "source-layer": "ROJO_punts_aquifer_detectats",
                 "type": "circle",
                 "layout": {
                 "visibility": "visible"
                 },
                 "paint": {
-                    "circle-radius": 4,
+                    "circle-radius": 6,
                     "circle-color": "red"
                 }
             });
-            ////////////////// Red points //////////////////////////////////////  
+            ////////////////// Red points //////////////////////////////////////
         });      
         // Create map //////////////////////
 
@@ -161,63 +161,70 @@
             layers.appendChild(link);
         }
         // Disable enable layers //////////  
+
         // Show metadata points //////////  
         map.on('click', function (e) {
             var features = map.queryRenderedFeatures(e.point);
             
-        // Limit the number of properties we're displaying for ////////// 
-        // Legibility and performance ////////// 
-        var displayProperties = [           
-       /*  'UTM_X',    
-        'type',
-        'id',
-        'layer',
-        'source',
-        'sourceLayer',
-        'state', */
-        "properties"                 
-        ];
-        var displayFeatures = features.map(function (feat) {
-            var displayFeat = {};
-            displayProperties.forEach(function (prop) {
+            // Limit the number of properties we're displaying for ////////// 
+            // Legibility and performance ////////// 
+            var displayProperties = [           
+            /*  'UTM_X',    
+            'type',
+            'id',
+            'layer',
+            'source',
+            'sourceLayer',
+            'state', */
+            "properties"                 
+            ];
+             var displayFeatures = features.map(function (feat) {
+                var displayFeat = {};
+                displayProperties.forEach(function (prop) {
                 displayFeat[prop] = feat[prop];
+                });
+                return displayFeat;
             });
-            return displayFeat;
-        });
  
-        var dataFeatures=document.getElementById('features').innerHTML = JSON.stringify(
-            displayFeatures,
-            null,
-            2
-        );
-        
-        
-        // Get dates of properties       
-        var dataProperties=JSON.parse(dataFeatures);
-        code= dataProperties[0].properties.CODE;
-        coherence= dataProperties[0].properties.AUTOCORR;      
-        vel= dataProperties[0].properties.VEL; 
-        /* for (var i = 0; i < dataProperties.length; i++) { 
-            console.log(dataProperties[i].properties.VEL + "pepeVel");
-        } */
+            var dataFeatures=document.getElementById('features').innerHTML = JSON.stringify(
+                displayFeatures,
+                null,
+                2
+            );
+            /* features.forEach(element => console.log(element + "element"));
+            for (var i = 0; i < features.length; i++) {
+                console.log(features + "element");
 
+            } */
+        
+            // Get dates of properties       
+            var dataProperties=JSON.parse(dataFeatures);
+
+            code= dataProperties[0].properties.CODE;
+            coherence= dataProperties[0].properties.AUTOCORR;      
+            vel= dataProperties[0].properties.VEL; 
         
         
             
         
-        var displacementValues = [];
-        console.log(code + "pepe");
-        console.log(coherence);
-        console.log(vel);
-        console.log(dataProperties.length + "  typeof");
+            var displacementValues = [];
+            console.log(code + "pepe");
+            
+            console.log(coherence);
+            console.log(vel);
+            console.log(dataProperties.length + "  typeof");
+
+            /* console.log(features[0].properties[1]CODE + "super") ; */
+            var jsonPunto = JSON.stringify(features);
+            console.log( jsonPunto +"   datos json punto")
         
 
         
 
-        // Call googleCghart ////////
-        if (code!=null){ 
-            document.getElementById('container_chart_div').style.display="block";      
-            google.charts.setOnLoadCallback(drawChart);
+            // Call googleCghart ////////
+            if (code!=null){ 
+                document.getElementById('container_chart_div').style.display="block";      
+                google.charts.setOnLoadCallback(drawChart);
         }
     });
     // Show metadata points ////////// 
