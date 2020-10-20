@@ -8,7 +8,7 @@
 <link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css" type="text/css"/>
-<link rel="stylesheet" href="./css/index.css" type="text/css"/>
+<link rel="stylesheet" href="./css/appESACambrils_01.css" type="text/css"/>
 <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
@@ -27,7 +27,6 @@
     </div>
    
     <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoidG9uaWxvZ2FyIiwiYSI6ImNqY3VkMnVmazB2bm0yd283aXBxZDV5d3gifQ.bbqgWxCfhrZVG-IgOPyQ8g';
         var identi;
        
             
@@ -38,10 +37,8 @@
 	    var map = new mapboxgl.Map({
             container: 'map',
             style: 'https://geoserveis.icgc.cat/contextmaps/hibrid.json', 
-            center: [1.380, 41.525],
-            maxZoom: 18,
-            minZoom: 1.65,
-            zoom: 7
+            center: [1.050, 41.125],
+            zoom: 10
             });
         // Style //////////////////////
         /*  map.addControl(new mapboxgl.FullscreenControl()); */
@@ -56,68 +53,64 @@
         // Create map //////////////////////
         map.on('load', function() {
             ////////////////// Green points //////////////////////////////////////
-            map.addSource("CAT_S1_UD_A132D037_201601_201912_EPSG_4326_WGS_84", {
+            map.addSource("VERDE_punts_no_aquifer", {
                 "type": "vector",
-                "tiles": ["http://localhost:8081/data/CAT_S1_UD_A132D037_201601_201912_EPSG_4326_WGS_84-f-pf-pk/{z}/{x}/{y}.pbf"],
-                /* "url": "mapbox://tonilogar.84dugze6", */
-               /*  "url": "http://localhost:8081/data/CAT_S1_UD_A132D037_201601_201912_4326_WSG_84-f-pf-pk.json",  */
-                 "minzoom": 0,
-                "maxzoom": 14 
+                "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/VERDE_punts_no_aquifer/{z}/{x}/{y}.pbf"],
+                "maxzoom": 7
             });       
             map.addLayer({
-                "id": "Green",
-                "source": "CAT_S1_UD_A132D037_201601_201912_EPSG_4326_WGS_84",
-                "source-layer": "CAT_S1_UD_A132D037_201601_201912_EPSG_4326_WGS_84",
+                "id": "Non aquifer motion points",
+                "source": "VERDE_punts_no_aquifer",
+                "source-layer": "VERDE_punts_no_aquifer",
                 "type": "circle",
                 "layout": {
                 "visibility": "visible"
                 },
                 "paint": {
-                    "circle-radius": 8,
-                    "circle-color": "orange"
+                    "circle-radius": 6,
+                    "circle-color": "green"
                 }
             });
             ////////////////// Green points //////////////////////////////////////
             ////////////////// Blue points //////////////////////////////////////
-            map.addSource("CAT_S1_UD_A030D110_201601_201912_EPSG_4326_WGS_84", {
+            ////////////////// Blue points //////////////////////////////////////
+            map.addSource("Pous_Catalunya_reduitBlue", {
                 "type": "vector",
-                "tiles": ["http://localhost:8081/data/CAT_S1_UD_A030D110_201601_201912_EPSG_4326_WGS_84-f-pf-pk/{z}/{x}/{y}.pbf"],
-                "minzoom": 0,
-                "maxzoom": 14
-            });       
+                "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/Pous_Catalunya_reduitBlue/{z}/{x}/{y}.pbf"],
+                "maxzoom": 7
+            });
+        
             map.addLayer({
-                "id": "blue",
-                "source": "CAT_S1_UD_A030D110_201601_201912_EPSG_4326_WGS_84",
-                "source-layer": "CAT_S1_UD_A030D110_201601_201912_EPSG_4326_WGS_84",
+                "id": "Declared wells",
+                "source": "Pous_Catalunya_reduitBlue",
+                "source-layer": "Pous_Catalunya_reduitBlue",
                 "type": "circle",
                 "layout": {
                 "visibility": "visible"
                 },
                 "paint": {
-                    "circle-radius": 8,
-                    "circle-color": "orange"
+                    "circle-radius": 3,
+                    "circle-color": "blue"
                 }
             });
             ////////////////// Blue points //////////////////////////////////////
             ////////////////// Red points //////////////////////////////////////
-            map.addSource("CAT_S1_UD_A132D110_201601_201912_EPSG_4326_WGS_84", {
+            var rojoSource=map.addSource("ROJO_punts_aquifer_detectats", {
                 "type": "vector",
-                "tiles": ["http://localhost:8081/data/CAT_S1_UD_A132D110_201601_201912_EPSG_4326_WGS_84-f-pf-pk/{z}/{x}/{y}.pbf"],
-                "minzoom": 0,
-                "maxzoom": 14 
-            });       
-            map.addLayer({
-                "id": "Red",
-                "source": "CAT_S1_UD_A132D110_201601_201912_EPSG_4326_WGS_84",
-                "source-layer": "CAT_S1_UD_A132D110_201601_201912_EPSG_4326_WGS_84",
+                "tiles": ["https://tilemaps.icgc.cat/tileserver/tileserver.php/ROJO_punts_aquifer_detectats/{z}/{x}/{y}.pbf"],
+                "maxzoom": 7
+            });
+            var rojoLayer=map.addLayer({
+                "id": "Aquifer motion points",
+                "source": "ROJO_punts_aquifer_detectats",
+                "source-layer": "ROJO_punts_aquifer_detectats",
                 "type": "circle",
                 "layout": {
                 "visibility": "visible"
                 },
                 "paint": {
-                    "circle-radius": 8,
-                    
-                    "circle-color": "orange"
+                    "circle-radius": 6,
+                    "circle-color": "red"
                 }
             });
             ////////////////// Red points //////////////////////////////////////
@@ -137,7 +130,7 @@
 
         // Disable enable layers //////////    
         // Enumerate ids of the layers ////////// 
-        var toggleableLayerIds = ['Green', 'blue', 'Red'];
+        var toggleableLayerIds = ['Non aquifer motion points', 'Declared wells', 'Aquifer motion points'];
 
         // Set up the corresponding toggle button for each layer ////////// 
         for (var i = 0; i < toggleableLayerIds.length; i++) {
