@@ -62,7 +62,7 @@ body
     position: absolute;
     left: 0;
     top: 0;
-    width: 100%;
+    width: 100vw;
     background: rgba(255, 255, 255, 0.6);
     z-index: 100;
     display: none;  
@@ -72,7 +72,7 @@ body
     margin-right: 10px;
 }
 #title_chart_div {
-    width: 100%;
+    width: 100vw;
     height: 30px;
     background: #3887be;
 }

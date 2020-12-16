@@ -4,8 +4,8 @@ body
 #map
 { position: absolute; top: 0; bottom: 0; width: 100%; 
 }
-#menu {
-    background: #fff;
+.layers {
+    background: white;
     position: absolute;
     z-index: 1;
     top: 200px;
@@ -16,42 +16,25 @@ body
     font-family: 'Open Sans', sans-serif;
 }
 
-#menu a {
+.layers button {
     font-size: 13px;
-    color: #404040;
+    color: black;
     display: block;
     margin: 0;
     padding: 0;
     padding: 10px;
     text-decoration: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid black;
     text-align: center;
+    width: 100%;
+    background-color: rgb(116, 116, 197);
+}
+.layers button span{
+    color: black;
 }
 
-#menu a:last-child {
-    border: none;
-}
-
-#menu a:hover {
+.layers button:hover {
     background-color: #f8f8f8;
-    color: #404040;
-}
-
-#menu a.active {
-    background-color: #3887be;
-    color: #ffffff;
-}
-
-#menu a.active:hover {
     background: #3074a4;
+    cursor: pointer;
 }
-#features {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 300px;
-    height: 120px;
-    overflow: auto;
-    background: rgba(255, 255, 255, 0.8);
-    overflow: hidden;
-    }
